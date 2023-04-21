@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show BuildContext, Color, Container, StatelessWidget, Widget;
+
 
 class NovoWidget extends StatelessWidget {
   Color newColor;

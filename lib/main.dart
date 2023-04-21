@@ -1,87 +1,62 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import './novowidget.dart';
+import './questionario.dart';
+import './resultado.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const PerguntaApp());
 
-class PerguntaAppState extends State<MyApp> {
-  var PerguntaSelecionada = 0;
-  void responder() {
-    PerguntaSelecionada++;
-    print(PerguntaSelecionada);
+class _PerguntaAppState extends State<PerguntaApp> {
+  var _perguntaSelecionada = 0;
+  final _perguntas = const [
+    {
+      'texto': 'Qual é a sua cor favorita?',
+      'respostas': ['Preto', 'Vermelho', 'Verde', 'Branco'],
+    },
+    {
+      'texto': 'Qual é o seu animal favorito?',
+      'respostas': ['Coelho', 'Cobra', 'Elefante', 'Leão'],
+    },
+    {
+      'texto': 'Qual é o seu instrutor favorito?',
+      'respostas': ['Maria', 'João', 'Leo', 'Pedro'],
+    },
+  ];
+
+  void _responder() {
+    if (temPerguntaSelecionada) {
+      setState(() {
+        _perguntaSelecionada++;
+      });
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final List<String> perguntas = [
-      'Qual é a sua cor favorita?',
-      'Qual é o seu animal favorito?',
-      'Qual é o seu esporte favorito?',
-    ];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            Text(perguntas[PerguntaSelecionada]),
-            const SizedBox(height: 30),
-            SizedBox(
-              height: 50,
-              width: 220,
-              child: CupertinoButton(
-                color: Colors.green,
-                onPressed: responder,
-                child: const Text('Verde'),
-              ),
-            ),
-            const SizedBox(height: 30),
-            SizedBox(
-              height: 50,
-              width: 220,
-              child: CupertinoButton(
-                color: Colors.blue,
-                onPressed: responder,
-                child: const Text('Azul'),
-              ),
-            ),
-            const SizedBox(height: 30),
-            SizedBox(
-              height: 50,
-              width: 220,
-              child: CupertinoButton(
-                color: Colors.red,
-                onPressed: responder,
-                child: const Text('Vermelho'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+  bool get temPerguntaSelecionada {
+    return _perguntaSelecionada < _perguntas.length;
   }
-}
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Perguntas',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Perguntas'),
+        ),
+        body: temPerguntaSelecionada
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                quandoResponder: _responder,
+              )
+            : const Resultado(),
       ),
-      home: const MyHomePage(title: 'Perguntas'),
     );
+  }
+}
+
+class PerguntaApp extends StatefulWidget {
+  const PerguntaApp({super.key});
+
+  @override
+  _PerguntaAppState createState() {
+    return _PerguntaAppState();
   }
 }
